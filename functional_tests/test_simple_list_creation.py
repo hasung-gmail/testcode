@@ -35,6 +35,7 @@ class NewVisitorTest(FunctionalTest):
         ## 새로운 브라우저 세션을 이용해서 에디스의 정보가 
         ## 쿠키를 통해 유입되는 것을 방지한다. 
 
+        """
         self.browser.quit()
         self.browser = webdriver.Chrome('chromedriver')
 
@@ -55,3 +56,4 @@ class NewVisitorTest(FunctionalTest):
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('공작깃털 사기', page_text)
         self.assertIn('우유 사기', page_text) 
+        """
