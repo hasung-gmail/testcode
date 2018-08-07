@@ -17,7 +17,7 @@ class NewListTest(TestCase):
     def test_saving_a_POST_request(self):
         self.client.post(
             resolve_url('new_list'),
-            data={'item_text': '신규 작업 아이템'},
+            data={'text': '신규 작업 아이템'},
         )
         self.assertEqual(Item.objects.count(), 1)
         new_item = Item.objects.first()
@@ -26,13 +26,13 @@ class NewListTest(TestCase):
     def test_redirects_after_POST(self):
         response = self.client.post(
             resolve_url('new_list'),
-            data={'item_text': '신규 작업 아이템'}, 
+            data={'text': '신규 작업 아이템'}, 
         )
         list_ = List.objects.first()
         self.assertRedirects(response, '/lists/%d/' % (list_.id,))
 
     def test_validation_errors_are_send_back_to_home_page_template(self):
-        response = self.client.post('/lists/new/', data={'item_text':''})
+        response = self.client.post('/lists/new/', data={'text':''})
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'home.html')
 
@@ -40,7 +40,7 @@ class NewListTest(TestCase):
         self.assertContains(response, expected_error)
 
     def test_invalid_list_items_arent_saved(self):
-        self.client.post('/lists/new/', data={'item_text':''})
+        self.client.post('/lists/new/', data={'text':''})
         self.assertEqual(List.objects.count(), 0)
         self.assertEqual(Item.objects.count(), 0)
 
@@ -93,7 +93,7 @@ class ListViewTest(TestCase):
 
         self.client.post(
             '/lists/%d/' % (correct_list.id,),
-            data={'item_text':'기존 목록에 신규 아이템'},
+            data={'text':'기존 목록에 신규 아이템'},
         )
 
         self.assertEqual(Item.objects.count(), 1)
@@ -107,7 +107,7 @@ class ListViewTest(TestCase):
 
         response = self.client.post(
             '/lists/%d/' % (correct_list.id,),
-            data={'item_text': '기존 목록에 신규 아이템'}
+            data={'text': '기존 목록에 신규 아이템'}
         )
         self.assertRedirects(response, '/lists/%d/' % (correct_list.id,))
 
@@ -115,7 +115,7 @@ class ListViewTest(TestCase):
         list_ = List.objects.create()
         response = self.client.post(
             '/lists/%d/' % (list_.id,),
-            data={'item_text':''},
+            data={'text':''},
         )
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'list.html')
