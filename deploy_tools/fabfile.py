@@ -2,9 +2,14 @@ from fabric.contrib.files import append, exists, sed
 from fabric.api import env, local, run
 import random
 
+from fabric.network import ssh 
+
 REPO_URL = 'https://github.com/hasung-gmail/testcode'
 
 def deploy():
+
+    ssh.util.log_to_file("paramiko.log", 10)
+
     site_folder = '/home/%s/sites/%s' % (env.user, env.host)
     source_folder = site_folder + '/source'
 
